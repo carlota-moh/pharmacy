@@ -1,13 +1,13 @@
 def selection():
     choice = input("Your choice: ")
     if choice == "1":
-        ViewInventory()
+        view_inventory()
     elif choice == "2":
-        AddItem()
+        add_item()
     elif choice == "3":
-        RemoveItem()
+        remove_item()
     elif choice == "4":
-        SearchItem()
+        search_item()
     elif choice == "5":
         print("Have a nice day!")
     else:
@@ -38,59 +38,69 @@ class Drug:
         return self.name
 
     @classmethod
-    def getinventory(cls, name):
+    def get_inventory(cls, name):
         return cls.inventory.get(name, "Sorry, we do not have that drug in stock")
 
 
 class Antidepressant(Drug):
+    count = 0
+    inventory = {}
     def __init__(self, name, dose):
         super().__init__(name, dose)
 
 
 class Neuroleptic(Drug):
+    count = 0
+    inventory = {}
     def __init__(self, name, dose):
         super().__init__(name, dose)
 
 
-def ViewInventory():
+def view_inventory():
+    print(Drug.inventory)
     print(Antidepressant.inventory)
     print(Neuroleptic.inventory)
     menu()
 
 
-def AddItem():
-    name = input("What's your drug's name? ")
-    type = input("What type of drug is it? ")
-    type = type.lower()
-    dose = input("Specify dose: ")
-    if type == "antidepressant":
+def add_item():
+    dtype = input("What type of drug is it? ")
+    dtype = dtype.lower()
+    Drug.count += 1
+    if dtype == "antidepressant":
+        drug = Antidepressant(name = input("What's your drug's name? "), dose = input("Specify dose: "))
         Antidepressant.count += 1
-        if name not in Antidepressant.inventory.keys():
-            Antidepressant.inventory[name] = 1
+        if drug.name not in Antidepressant.inventory.keys():
+            Antidepressant.inventory[drug.name] = 1
+            Drug.inventory[drug.name] = 1
         else:
-            Antidepressant.inventory[name] += 1
-    elif type == "neuroleptic":
+            Antidepressant.inventory[drug.name] =+ 1
+            Drug.inventory[drug.name] += 1
+    elif dtype == "neuroleptic":
+        drug = Neuroleptic(name = input("What's your drug's name? "), dose = input("Specify dose: "))
         Neuroleptic.count += 1
-        if name not in Neuroleptic.inventory.keys():
-            Neuroleptic.inventory[name] = 1
+        if drug.name not in Neuroleptic.inventory.keys():
+            Neuroleptic.inventory[drug.name] = 1
+            Drug.inventory[drug.name] = 1
         else:
-            Neuroleptic.inventory[name] += 1
+            Neuroleptic.inventory[drug.name] =+ 1
+            Drug.inventory[drug.name] += 1
     menu()
 
 
-def RemoveItem():
+def remove_item():
     name = input("What's your drug's name? ")
     menu()
 
 
-def SearchItem():
+def search_item():
     name = ("What drug are you looking for? ")
-    type = ("What type of drug is it? ")
-    type = type.lower()
-    if type == "antidepressant":
-        Antidepressant.getinventory(name)
-    elif type == "neuroleptic":
-        Neuroleptic.getinventory(name)
+    dtype = ("What type of drug is it? ")
+    dtype = dtype.lower()
+    if dtype == "antidepressant":
+        Antidepressant.get_inventory(name)
+    elif dtype == "neuroleptic":
+        Neuroleptic.get_inventory(name)
     menu()
 
 
