@@ -1,0 +1,44 @@
+class Drug:
+    inventory = {}
+
+    def __init__(self, name, dose):
+        self.name = name
+        self.dose = dose
+
+    def __repr__(self):
+        return self.name
+
+    @classmethod
+    def add_drug(cls, name):
+        if name not in cls.inventory.keys():
+            cls.inventory[name] = 1
+            print(cls.inventory)
+        else:
+            cls.inventory[name] += 1
+            print(cls.inventory)
+
+    @classmethod
+    def remove_drug(cls, name):
+        if name not in cls.inventory.keys():
+            print("Sorry, we do not have that drug in stock")
+        elif cls.inventory[name] == 1:
+            cls.inventory.pop(name)
+        else:
+            cls.inventory[name] = cls.inventory[name] - 1
+
+class Antidepressant(Drug):
+    inventory = {}
+    def __init__(self, name, dose):
+        super().__init__(name, dose)
+
+
+Drug.add_drug('Simtron')
+Drug.add_drug('Simtron')
+Drug.add_drug('Simtron')
+Antidepressant.add_drug('Citalopram')
+Antidepressant.add_drug('Amitriptilina')
+Antidepressant.add_drug('Amitriptilina')
+Drug.remove_drug('Simtron')
+print(Drug.inventory)
+Antidepressant.remove_drug("Cocaine")
+

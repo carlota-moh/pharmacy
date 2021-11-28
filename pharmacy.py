@@ -1,7 +1,7 @@
 def selection():
     choice = input("Your choice: ")
     if choice == "1":
-        view_inventory()
+        view_items()
     elif choice == "2":
         add_item()
     elif choice == "3":
@@ -14,82 +14,89 @@ def selection():
         print("Sorry, I did not understand you")
         selection()
 
-def menu():
-    print("--- WELCOME TO THE PHARMACY ---")
-    print("Choose one option: ")
-    print("1. View inventory")
-    print("2. Add drug")
-    print("3. Remove drug")
-    print("4. Search drug")
-    print("5. Exit")
-    print("--------------------------------")
-    selection()
 
+    def menu():
+        print("--- WELCOME TO THE PHARMACY ---")
+        print("Choose one option: ")
+        print("1. View inventory")
+        print("2. Add drug")
+        print("3. Remove drug")
+        print("4. Search drug")
+        print("5. Exit")
+        print("--------------------------------")
+        selection()
 
 class Drug:
-    count = 0
     inventory = {}
 
-    def __init__(self, name, dose):
+    def __init__(self, name):
         self.name = name
-        self.dose = dose
 
     def __repr__(self):
         return self.name
 
+
     @classmethod
-    def get_inventory(cls, name):
-        return cls.inventory.get(name, "Sorry, we do not have that drug in stock")
+    def view_inventory(cls):
+        print(cls.inventory)
+
+
+    @classmethod
+    def add_drug(cls, name):
+        if name not in cls.inventory.keys():
+            cls.inventory[name] = 1
+            print(cls.inventory)
+        else:
+            cls.inventory[name] += 1
+            print(cls.inventory)
+
+
+    @classmethod
+    def remove_drug(cls, name):
+        if name not in cls.inventory.keys():
+            print("Sorry, we do not have that drug in stock")
+        elif cls.inventory[name] == 1:
+            cls.inventory.pop(name)
+        else:
+            cls.inventory[name] = cls.inventory[name] - 1
+
 
 
 class Antidepressant(Drug):
-    count = 0
     inventory = {}
     def __init__(self, name, dose):
         super().__init__(name, dose)
 
 
 class Neuroleptic(Drug):
-    count = 0
     inventory = {}
     def __init__(self, name, dose):
         super().__init__(name, dose)
 
-
-def view_inventory():
-    print(Drug.inventory)
-    print(Antidepressant.inventory)
-    print(Neuroleptic.inventory)
+def view_items():
+    Drug.view_inventory()
     menu()
 
 
 def add_item():
-    dtype = input("What type of drug is it? ")
-    dtype = dtype.lower()
-    Drug.count += 1
+    name = input("What's your drug's name? ")
+    dtype = input("What type of drug is it?").lower()
+    Drug.add_drug(name)
     if dtype == "antidepressant":
-        drug = Antidepressant(name = input("What's your drug's name? "), dose = input("Specify dose: "))
-        Antidepressant.count += 1
-        if drug.name not in Antidepressant.inventory.keys():
-            Antidepressant.inventory[drug.name] = 1
-            Drug.inventory[drug.name] = 1
-        else:
-            Antidepressant.inventory[drug.name] =+ 1
-            Drug.inventory[drug.name] += 1
+        Antidepressant.add_drug(name)
     elif dtype == "neuroleptic":
-        drug = Neuroleptic(name = input("What's your drug's name? "), dose = input("Specify dose: "))
-        Neuroleptic.count += 1
-        if drug.name not in Neuroleptic.inventory.keys():
-            Neuroleptic.inventory[drug.name] = 1
-            Drug.inventory[drug.name] = 1
-        else:
-            Neuroleptic.inventory[drug.name] =+ 1
-            Drug.inventory[drug.name] += 1
+        Neuroleptic.add_drug(name)
     menu()
 
 
 def remove_item():
     name = input("What's your drug's name? ")
+    dtype = input("What type of drug is it?").lower()
+    Drug.remove_drug(name)
+    if dtype == "antidepressant":
+        Antidepressant.remove_drug(name)
+    elif dtype == "neuroleptic":
+        Neuroleptic.remove_drug(name)
     menu()
 
 
@@ -102,7 +109,6 @@ def search_item():
     elif dtype == "neuroleptic":
         Neuroleptic.get_inventory(name)
     menu()
-
 
 menu()
 
