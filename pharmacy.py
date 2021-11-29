@@ -15,16 +15,17 @@ def selection():
         selection()
 
 
-    def menu():
-        print("--- WELCOME TO THE PHARMACY ---")
-        print("Choose one option: ")
-        print("1. View inventory")
-        print("2. Add drug")
-        print("3. Remove drug")
-        print("4. Search drug")
-        print("5. Exit")
-        print("--------------------------------")
-        selection()
+def menu():
+    print("--- WELCOME TO THE PHARMACY ---")
+    print("Choose one option: ")
+    print("1. View inventory")
+    print("2. Add drug")
+    print("3. Remove drug")
+    print("4. Search drug")
+    print("5. Exit")
+    print("--------------------------------")
+    selection()
+
 
 class Drug:
     inventory = {}
@@ -35,21 +36,16 @@ class Drug:
     def __repr__(self):
         return self.name
 
-
     @classmethod
     def view_inventory(cls):
         print(cls.inventory)
-
 
     @classmethod
     def add_drug(cls, name):
         if name not in cls.inventory.keys():
             cls.inventory[name] = 1
-            print(cls.inventory)
         else:
             cls.inventory[name] += 1
-            print(cls.inventory)
-
 
     @classmethod
     def remove_drug(cls, name):
@@ -60,18 +56,24 @@ class Drug:
         else:
             cls.inventory[name] = cls.inventory[name] - 1
 
+    @classmethod
+    def search_drug(cls, name):
+        print(cls.inventory.get(name, "Sorry, we do not have that drug in stock"))
 
 
 class Antidepressant(Drug):
     inventory = {}
-    def __init__(self, name, dose):
-        super().__init__(name, dose)
+
+    def __init__(self, name):
+        super().__init__(name)
 
 
 class Neuroleptic(Drug):
     inventory = {}
-    def __init__(self, name, dose):
-        super().__init__(name, dose)
+
+    def __init__(self, name):
+        super().__init__(name)
+
 
 def view_items():
     Drug.view_inventory()
@@ -79,8 +81,8 @@ def view_items():
 
 
 def add_item():
-    name = input("What's your drug's name? ")
-    dtype = input("What type of drug is it?").lower()
+    name = input("What's your drug's name? ").capitalize()
+    dtype = input("What type of drug is it? ").lower()
     Drug.add_drug(name)
     if dtype == "antidepressant":
         Antidepressant.add_drug(name)
@@ -90,8 +92,8 @@ def add_item():
 
 
 def remove_item():
-    name = input("What's your drug's name? ")
-    dtype = input("What type of drug is it?").lower()
+    name = input("What's your drug's name? ").capitalize()
+    dtype = input("What type of drug is it? ").lower()
     Drug.remove_drug(name)
     if dtype == "antidepressant":
         Antidepressant.remove_drug(name)
@@ -101,14 +103,8 @@ def remove_item():
 
 
 def search_item():
-    name = ("What drug are you looking for? ")
-    dtype = ("What type of drug is it? ")
-    dtype = dtype.lower()
-    if dtype == "antidepressant":
-        Antidepressant.get_inventory(name)
-    elif dtype == "neuroleptic":
-        Neuroleptic.get_inventory(name)
+    Drug.search_drug(name)
     menu()
 
-menu()
-
+if __name__ == "__main__":
+    menu()
